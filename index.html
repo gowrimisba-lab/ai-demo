@@ -1,0 +1,346 @@
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>CineGlow - Movie App</title>
+
+<style>
+* {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+}
+
+body {
+  font-family: Arial, sans-serif;
+  color: white;
+  min-height: 100vh;
+  background: linear-gradient(135deg, #100c24, #1b1640, #31164a);
+}
+
+header {
+  padding: 24px 8%;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  gap: 20px;
+  flex-wrap: wrap;
+}
+
+.logo {
+  font-size: 27px;
+  font-weight: bold;
+  background: linear-gradient(90deg, #ff55c8, #9b8cff);
+  -webkit-background-clip: text;
+  color: transparent;
+}
+
+.search {
+  padding: 12px 18px;
+  border: 1px solid #554477;
+  border-radius: 25px;
+  background: #ffffff10;
+  color: white;
+  outline: none;
+  width: 240px;
+}
+
+.search::placeholder {
+  color: #c4bad7;
+}
+
+.hero {
+  margin: 20px 8% 35px;
+  padding: 45px;
+  border-radius: 25px;
+  background:
+    linear-gradient(90deg, #1b1038 15%, #4b216a99),
+    linear-gradient(135deg, #ed4caa, #6547e8);
+  box-shadow: 0 15px 40px #0004;
+}
+
+.hero p {
+  color: #e5d9f7;
+  margin-bottom: 12px;
+}
+
+.hero h1 {
+  font-size: clamp(30px, 5vw, 48px);
+  margin-bottom: 15px;
+}
+
+.hero button, .watch {
+  border: none;
+  padding: 12px 22px;
+  border-radius: 25px;
+  color: white;
+  cursor: pointer;
+  font-weight: bold;
+  background: linear-gradient(90deg, #ff43b5, #8757ff);
+}
+
+main {
+  padding: 0 8% 50px;
+}
+
+.section-title {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 22px;
+  gap: 12px;
+}
+
+.filters {
+  display: flex;
+  gap: 10px;
+  flex-wrap: wrap;
+  margin-bottom: 25px;
+}
+
+.filter {
+  padding: 9px 17px;
+  border-radius: 20px;
+  border: 1px solid #554477;
+  background: #ffffff08;
+  color: #ddd2f1;
+  cursor: pointer;
+}
+
+.filter.active {
+  background: linear-gradient(90deg, #ec43b1, #7957ff);
+  color: white;
+  border-color: transparent;
+}
+
+.movies {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(190px, 1fr));
+  gap: 25px;
+}
+
+.movie {
+  background: #ffffff0b;
+  border: 1px solid #ffffff12;
+  border-radius: 18px;
+  overflow: hidden;
+  transition: transform .25s, box-shadow .25s;
+}
+
+.movie:hover {
+  transform: translateY(-7px);
+  box-shadow: 0 12px 30px #a23dff22;
+}
+
+.poster {
+  height: 260px;
+  display: flex;
+  align-items: end;
+  padding: 17px;
+  font-size: 22px;
+  font-weight: bold;
+  background: linear-gradient(160deg, #ff8b6a, #8c3de8 65%, #15102c);
+  background-size: cover;
+  background-position: center;
+  text-shadow: 0 2px 10px #000;
+}
+
+.movie-info {
+  padding: 16px;
+}
+
+.movie-info h3 {
+  margin-bottom: 9px;
+}
+
+.meta {
+  font-size: 13px;
+  color: #bcb1d3;
+  margin-bottom: 15px;
+}
+
+.watch {
+  width: 100%;
+  padding: 10px;
+}
+
+.empty {
+  color: #c4bad7;
+  padding: 25px 0;
+  grid-column: 1 / -1;
+}
+
+footer {
+  text-align: center;
+  padding: 25px;
+  color: #a99cbe;
+  border-top: 1px solid #ffffff12;
+}
+
+@media (max-width: 600px) {
+  header { padding: 22px 5%; }
+  main { padding: 0 5% 35px; }
+  .hero { margin: 15px 5% 30px; padding: 30px 22px; }
+  .search { width: 100%; }
+  .movies { grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 13px; }
+  .poster { height: 190px; font-size: 17px; }
+  .movie-info { padding: 11px; }
+  .movie-info h3 { font-size: 15px; }
+}
+</style>
+</head>
+
+<body>
+
+<header>
+  <div class="logo">✦ CineGlow</div>
+  <input class="search" id="search"
+    type="search" placeholder="Search movies...">
+</header>
+
+<section class="hero">
+  <p>YOUR NEXT MOVIE NIGHT STARTS HERE</p>
+  <h1>Discover Your<br>Next Favorite Movie.</h1>
+  <p>Explore stories, adventures and unforgettable worlds.</p>
+  <button onclick="document.getElementById('catalog').scrollIntoView({behavior:'smooth'})">
+    Explore Movies →
+  </button>
+</section>
+
+<main id="catalog">
+  <div class="section-title">
+    <h2>Popular Movies</h2>
+    <span style="color:#c7b8e8">✦ Handpicked for you</span>
+  </div>
+
+  <div class="filters">
+    <button class="filter active" data-category="All">All</button>
+    <button class="filter" data-category="Action">Action</button>
+    <button class="filter" data-category="Sci-Fi">Sci-Fi</button>
+    <button class="filter" data-category="Drama">Drama</button>
+    <button class="filter" data-category="Adventure">Adventure</button>
+  </div>
+
+  <div class="movies" id="movies"></div>
+</main>
+
+<footer>© 2026 CineGlow · Made for movie lovers ✨</footer>
+
+<script>
+const movieList = [
+  {
+    title: "Interstellar",
+    genre: "Sci-Fi",
+    year: 2014,
+    rating: "8.7",
+    color: "linear-gradient(160deg,#f6a65c,#9c426c,#17152f)"
+  },
+  {
+    title: "Inception",
+    genre: "Action",
+    year: 2010,
+    rating: "8.8",
+    color: "linear-gradient(160deg,#68b4dc,#4d448f,#17142c)"
+  },
+  {
+    title: "The Dark Knight",
+    genre: "Action",
+    year: 2008,
+    rating: "9.0",
+    color: "linear-gradient(160deg,#8e9ba6,#34384d,#11111c)"
+  },
+  {
+    title: "Dune",
+    genre: "Adventure",
+    year: 2021,
+    rating: "8.0",
+    color: "linear-gradient(160deg,#edbd70,#a34f43,#30213b)"
+  },
+  {
+    title: "The Martian",
+    genre: "Sci-Fi",
+    year: 2015,
+    rating: "8.0",
+    color: "linear-gradient(160deg,#ff9c69,#b84a47,#30203d)"
+  },
+  {
+    title: "La La Land",
+    genre: "Drama",
+    year: 2016,
+    rating: "8.0",
+    color: "linear-gradient(160deg,#ffbd7a,#d85b9f,#5043a1)"
+  },
+  {
+    title: "Gladiator",
+    genre: "Action",
+    year: 2000,
+    rating: "8.5",
+    color: "linear-gradient(160deg,#d6a36a,#9b493c,#272037)"
+  },
+  {
+    title: "Avatar",
+    genre: "Adventure",
+    year: 2009,
+    rating: "7.9",
+    color: "linear-gradient(160deg,#65e1e7,#286bb7,#171b4c)"
+  }
+];
+
+let activeCategory = "All";
+
+function renderMovies() {
+  const query = document.getElementById("search").value.toLowerCase();
+
+  const filtered = movieList.filter(movie =>
+    (activeCategory === "All" || movie.genre === activeCategory) &&
+    movie.title.toLowerCase().includes(query)
+  );
+
+  const container = document.getElementById("movies");
+
+  if (!filtered.length) {
+    container.innerHTML = '<p class="empty">No movies found. Try another search.</p>';
+    return;
+  }
+
+  container.innerHTML = filtered.map((movie, index) => `
+    <article class="movie">
+      <div class="poster" style="background:${movie.color}">
+        ${movie.title}
+      </div>
+      <div class="movie-info">
+        <h3>${movie.title}</h3>
+        <p class="meta">${movie.year} · ${movie.genre} · ⭐ ${movie.rating}</p>
+        <button class="watch" onclick="showMovie('${movie.title}')">
+          ▶ Watch Details
+        </button>
+      </div>
+    </article>
+  `).join("");
+}
+
+document.querySelectorAll(".filter").forEach(button => {
+  button.addEventListener("click", () => {
+    document.querySelector(".filter.active").classList.remove("active");
+    button.classList.add("active");
+    activeCategory = button.dataset.category;
+    renderMovies();
+  });
+});
+
+document.getElementById("search").addEventListener("input", renderMovies);
+
+function showMovie(title) {
+  const movie = movieList.find(movie => movie.title === title);
+  alert(
+    `${movie.title}\n\nGenre: ${movie.genre}\nYear: ${movie.year}\nRating: ⭐ ${movie.rating}\n\nMovie details selected!`
+  );
+}
+
+renderMovies();
+</script>
+
+</body>
+</html>
